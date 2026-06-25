@@ -10,11 +10,42 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @foreach ($questions as $question)
-                        <div class="mb-6">
-                            <h3 class="text-lg font-semibold">{{ $question->title }}</h3>
-                            <p class="mt-2 text-gray-600 dark:text-gray-300">
-                                {{ Str::limit($question->body, 250) }}
-                            </p>
+                        <div class="flex gap-6">
+                            <div class="flex flex-col items-center gap-2 min-w-20 text-sm text-gray-600 dark:text-gray-400">
+                                <div class="text-center">
+                                    <span class="font-semibold text-gray-900 dark:text-gray-100">{{ $question->votes }}</span>
+                                    {{ Str::plural('vote', $question->votes) }}
+                                </div>
+                                <div @class([
+                                    'text-center px-2 py-1 rounded border text-xs font-medium',
+                                    'border-green-500 bg-green-50 text-green-800 dark:bg-green-900/30 dark:text-green-300 dark:border-green-600' => $question->status === 'answered-accepted',
+                                    'border-blue-500 bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-600' => $question->status === 'answered',
+                                    'border-gray-300 bg-gray-50 text-gray-600 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300' => $question->status === 'unanswered',
+                                ])>
+                                    <span class="font-semibold">{{ $question->answers }}</span>
+                                    {{ Str::plural('answer', $question->answers) }}
+                                </div>
+                                <div class="text-center">
+                                    {{ $question->views }} {{ Str::plural('view', $question->views) }}
+                                </div>
+                            </div>
+                            <div class="flex-1 mb-6">
+                                <h3 class="mt-0 text-lg font-semibold">
+                                    <a href="{{ $question->url }}" class="text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400">
+                                        {{ $question->title }}
+                                    </a>
+                                </h3>
+                                <p class="text-lg font-light text-gray-600 dark:text-gray-400">
+                                    Asked by
+                                    <a href="{{ $question->user->url }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                        {{ $question->user->name }}
+                                    </a>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ $question->created_date }}</span>
+                                </p>
+                                <p class="mt-2 text-gray-600 dark:text-gray-300">
+                                    {{ Str::limit($question->body, 250) }}
+                                </p>
+                            </div>
                         </div>
                         @unless ($loop->last)
                             <hr class="my-4 border-gray-200 dark:border-gray-700">
