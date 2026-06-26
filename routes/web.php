@@ -11,8 +11,9 @@ Route::get('/', function () {
 Route::resource('questions', QuestionController::class)
     ->except(['index', 'show'])
     ->middleware('auth');
-
-Route::resource('questions', QuestionController::class)->only(['index', 'show']);
+    
+Route::resource('questions', QuestionController::class)->only(['index']);
+Route::get('/questions/{question}', [QuestionController::class, 'show'])->name('questions.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
