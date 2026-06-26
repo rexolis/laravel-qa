@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use App\Http\Requests\AskQuestionRequest;
-use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -51,6 +50,8 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
+        $this->ensureUserOwnsQuestion($question);
+
         return view('questions.edit', compact('question'));
     }
 
@@ -59,6 +60,8 @@ class QuestionController extends Controller
      */
     public function update(AskQuestionRequest $request, Question $question)
     {
+        $this->ensureUserOwnsQuestion($question);
+
         $question->update($request->only('title', 'body'));
 
         return redirect('/questions')->with('success', "Your question has been updated.");
@@ -69,6 +72,15 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        $this->ensureUserOwnsQuestion($question);
+
+        $question->delete();
+
+        return redirect('/questions')->with('success', "Your question has been deleted.");
+    }
+
+    private function ensureUserOwnsQuestion(Question $question): void
+    {
+        abort_unless($question->user_id === auth()->id(), 403);
     }
 }

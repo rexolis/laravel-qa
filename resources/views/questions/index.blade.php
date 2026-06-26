@@ -43,9 +43,20 @@
                                             {{ $question->title }}
                                         </a>
                                     </h3>
-                                    <a href="{{ route('questions.edit', $question) }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                                        {{ __('Edit') }}
-                                    </a>
+                                    @if (auth()->id() === $question->user_id)
+                                        <div class="flex items-center gap-4 shrink-0">
+                                            <a href="{{ route('questions.edit', $question) }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+                                                {{ __('Edit') }}
+                                            </a>
+                                            <form method="post" action="{{ route('questions.destroy', $question) }}" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('{{ __('Are you sure?') }}')">
+                                                    {{ __('Delete') }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
                                 </div>
                                 <p class="text-lg font-light text-gray-600 dark:text-gray-400">
                                     Asked by
