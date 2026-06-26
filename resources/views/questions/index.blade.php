@@ -37,11 +37,16 @@
                                 </div>
                             </div>
                             <div class="flex-1 mb-6">
-                                <h3 class="mt-0 text-lg font-semibold">
-                                    <a href="{{ $question->url }}" class="text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400">
-                                        {{ $question->title }}
+                                <div class="flex items-center justify-between gap-4">
+                                    <h3 class="text-lg font-semibold">
+                                        <a href="{{ $question->url }}" class="text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300">
+                                            {{ $question->title }}
+                                        </a>
+                                    </h3>
+                                    <a href="{{ route('questions.edit', $question) }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+                                        {{ __('Edit') }}
                                     </a>
-                                </h3>
+                                </div>
                                 <p class="text-lg font-light text-gray-600 dark:text-gray-400">
                                     Asked by
                                     <a href="{{ $question->user->url }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
