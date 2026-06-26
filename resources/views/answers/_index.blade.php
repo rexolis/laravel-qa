@@ -13,6 +13,7 @@
                 <x-vote-controls
                     :votes="$answer->votes_count"
                     variant="answer"
+                    :answer="$answer"
                     :accepted="$question->best_answer_id === $answer->id"
                 />
 

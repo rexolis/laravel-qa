@@ -63,4 +63,9 @@ class AnswerPolicy
     {
         return false;
     }
+
+    public function accept(User $user, Answer $answer)
+    {
+        return $user->id === $answer->question->user_id;
+    }
 }

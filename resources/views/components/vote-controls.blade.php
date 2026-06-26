@@ -3,6 +3,7 @@
     'variant' => 'question',
     'favorited' => false,
     'accepted' => false,
+    'answer' => null,
 ])
 
 <div {{ $attributes->merge(['class' => 'flex flex-col items-center shrink-0 min-w-[60px] mr-8 text-center text-gray-600 dark:text-gray-400']) }}>
@@ -34,16 +35,32 @@
             </svg>
             <span class="block text-xs mt-0.5">0</span>
         </a>
-    @else
-        <a href="#" title="{{ __('Mark this answer as best answer') }}"
-            @class([
-                'block mt-2',
-                'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300' => $accepted,
-                'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' => ! $accepted,
-            ])>
-            <svg class="w-6 h-6 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
-            </svg>
-        </a>
+    @elseif ($answer)
+        @can('accept', $answer)
+            <a href="#"
+                title="{{ __('Mark this answer as best answer') }}"
+                @class([
+                    'block mt-2 cursor-pointer',
+                    'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300' => $accepted,
+                    'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' => ! $accepted,
+                ])
+                onclick="event.preventDefault(); document.getElementById('accept-answer-{{ $answer->id }}').submit();">
+                <svg class="w-6 h-6 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+                </svg>
+            </a>
+            <form id="accept-answer-{{ $answer->id }}" action="{{ route('answers.accept', $answer) }}" method="POST" class="hidden">
+                @csrf
+            </form>
+        @else
+            @if ($accepted)
+                <span title="{{ __('The question owner accepted this answer as best answer') }}"
+                    class="block mt-2 text-green-600 dark:text-green-400">
+                    <svg class="w-6 h-6 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+                    </svg>
+                </span>
+            @endif
+        @endcan
     @endif
 </div>
