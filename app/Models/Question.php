@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'body', 'user_id', 'views', 'answers', 'votes'])]
+#[Fillable(['title', 'body', 'user_id', 'views', 'answers_count', 'votes'])]
 class Question extends Model
 {
     use HasFactory;
@@ -21,7 +21,7 @@ class Question extends Model
     {
         return [
             'views' => 'integer',
-            'answers' => 'integer',
+            'answers_count' => 'integer',
             'votes' => 'integer',
         ];
     }
@@ -48,7 +48,7 @@ class Question extends Model
 
     public function getStatusAttribute()
     {
-        if ($this->answers > 0) {
+        if ($this->answers_count > 0) {
             if ($this->best_answer_id) {
                 return "answered-accepted";
             }
@@ -65,5 +65,10 @@ class Question extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }

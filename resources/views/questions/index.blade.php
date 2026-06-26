@@ -29,8 +29,8 @@
                                     'border-blue-500 bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-600' => $question->status === 'answered',
                                     'border-gray-300 bg-gray-50 text-gray-600 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300' => $question->status === 'unanswered',
                                 ])>
-                                    <span class="font-semibold">{{ $question->answers }}</span>
-                                    {{ Str::plural('answer', $question->answers) }}
+                                    <span class="font-semibold">{{ $question->answers_count }}</span>
+                                    {{ Str::plural('answer', $question->answers_count) }}
                                 </div>
                                 <div class="text-center">
                                     {{ $question->views }} {{ Str::plural('view', $question->views) }}
