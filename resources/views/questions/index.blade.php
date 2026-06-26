@@ -43,7 +43,7 @@
                                             {{ $question->title }}
                                         </a>
                                     </h3>
-                                    @if (auth()->id() === $question->user_id)
+                                    @can('update', $question)
                                         <div class="flex items-center gap-4 shrink-0">
                                             <a href="{{ route('questions.edit', $question) }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
                                                 {{ __('Edit') }}
@@ -56,7 +56,7 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    @endif
+                                    @endcan
                                 </div>
                                 <p class="text-lg font-light text-gray-600 dark:text-gray-400">
                                     Asked by
