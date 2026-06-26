@@ -8,7 +8,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('questions', QuestionController::class);
+Route::resource('questions', QuestionController::class)
+    ->except(['index', 'show'])
+    ->middleware('auth');
+
+Route::resource('questions', QuestionController::class)->only(['index', 'show']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Http\Requests\AskQuestionRequest;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -22,15 +23,19 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        $question = new Question();
+
+        return view('questions.create', compact('question'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AskQuestionRequest $request)
     {
-        //
+        $request->user()->questions()->create($request->only('title', 'body'));
+
+        return redirect()->route('questions.index')->with('success', 'Your question has been submitted');
     }
 
     /**
