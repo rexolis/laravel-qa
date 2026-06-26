@@ -20,6 +20,10 @@ Route::post('/questions/{question}/answers', [AnswerController::class, 'store'])
     ->name('questions.answers.store')
     ->middleware('auth');
 
+Route::resource('questions.answers', AnswerController::class)
+    ->only(['edit', 'update', 'destroy'])
+    ->middleware('auth');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

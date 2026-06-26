@@ -20,15 +20,33 @@
                     <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
                         {!! $answer->body_html !!}
                     </div>
-                    <div class="mt-4 flex items-center justify-end gap-3">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Answered {{ $answer->created_date }}</span>
-                        <div class="flex items-center gap-2">
-                            <a href="{{ $answer->user->url }}">
-                                <img src="{{ $answer->user->avatar }}" alt="{{ $answer->user->name }}" class="h-8 w-8 rounded-full">
-                            </a>
-                            <a href="{{ $answer->user->url }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                                {{ $answer->user->name }}
-                            </a>
+                    <div class="mt-4 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 shrink-0">
+                            @can('update', $answer)
+                                <a href="{{ route('questions.answers.edit', [$question, $answer]) }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+                                    {{ __('Edit') }}
+                                </a>
+                            @endcan
+                            @can('delete', $answer)
+                                <form method="post" action="{{ route('questions.answers.destroy', [$question, $answer]) }}" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('{{ __('Are you sure?') }}')">
+                                        {{ __('Delete') }}
+                                    </button>
+                                </form>
+                            @endcan
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Answered {{ $answer->created_date }}</span>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ $answer->user->url }}">
+                                    <img src="{{ $answer->user->avatar }}" alt="{{ $answer->user->name }}" class="h-8 w-8 rounded-full">
+                                </a>
+                                <a href="{{ $answer->user->url }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                    {{ $answer->user->name }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
