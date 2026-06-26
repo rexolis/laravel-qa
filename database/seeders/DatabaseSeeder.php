@@ -2,22 +2,31 @@
 
 namespace Database\Seeders;
 
+use App\Models\Answer;
 use App\Models\Question;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
         User::factory(3)
-            ->has(Question::factory()->count(rand(1, 5)))
-            ->create();
+            ->create()
+            ->each(function (User $user) {
+                Question::factory()
+                    ->count(rand(1, 5))
+                    ->for($user)
+                    ->create()
+                    ->each(function (Question $question) {
+                        Answer::factory()
+                            ->count(rand(1, 5))
+                            ->for($question)
+                            ->create();
+                    });
+            });
     }
 }

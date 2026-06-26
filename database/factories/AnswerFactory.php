@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Question;
+use App\Models\Answer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Question>
+ * @extends Factory<Answer>
  */
-class QuestionFactory extends Factory
+class AnswerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,11 +19,9 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'title' => rtrim(fake()->sentence(rand(5, 10)), '.'),
             'body' => fake()->paragraphs(rand(3, 7), true),
-            'views' => fake()->numberBetween(0, 10),
-            'votes' => fake()->numberBetween(-3, 10),
+            'user_id' => User::inRandomOrder()->value('id'),
+            'votes_count' => fake()->numberBetween(0, 5),
         ];
     }
 }
