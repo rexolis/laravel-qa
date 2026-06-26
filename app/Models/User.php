@@ -45,4 +45,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Answer::class);
     }
+
+    public function getAvatarAttribute(): string
+    {
+        $hash = md5(strtolower(trim($this->email)));
+
+        return "https://www.gravatar.com/avatar/{$hash}?s=32";
+    }
 }
