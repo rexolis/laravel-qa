@@ -13,6 +13,12 @@ class VoteAnswerController extends Controller
 
         auth()->user()->voteAnswer($answer, $vote);
 
-        return back();
+        $answer->refresh();
+        $answer->unsetRelation('votes');
+
+        return response()->json([
+            'votes_count' => $answer->votes_count,
+            'user_vote' => $answer->user_vote,
+        ]);
     }
 }

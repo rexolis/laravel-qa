@@ -14,6 +14,12 @@ class VoteQuestionController extends Controller
         $vote = (int) request()->vote;
         auth()->user()->voteQuestion($question, $vote);
 
-        return back();
+        $question->refresh();
+        $question->unsetRelation('votes');
+
+        return response()->json([
+            'votes_count' => $question->votes_count,
+            'user_vote' => $question->user_vote,
+        ]);
     }
 }
