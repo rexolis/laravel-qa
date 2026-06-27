@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 class Question extends Model
 {
     use HasFactory, Votable;
+
+    protected $appends = ['created_date'];
     
     /**
      * Get the attributes that should be cast.

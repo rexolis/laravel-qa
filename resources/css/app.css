@@ -6,6 +6,10 @@
     html {
         scrollbar-gutter: stable;
     }
+
+    [v-cloak] {
+        display: none;
+    }
 }
 
 @layer components {

@@ -22,7 +22,7 @@
                                 {!! $question->body_html !!}
                             </div>
                             <div class="mt-4 flex items-center justify-end">
-                                <x-author-meta :model="$question" label="Asked" />
+                                <div data-user-info data-model='@json($question)' data-label="Asked"></div>
                             </div>
                         </div>
                     </div>

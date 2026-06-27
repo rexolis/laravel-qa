@@ -1,3 +1,14 @@
+@php
+    $answerPayload = [
+        'id' => $answer->id,
+        'question_id' => $answer->question_id,
+        'body' => $answer->body,
+        'body_html' => $answer->body_html,
+        'created_date' => $answer->created_date,
+        'user' => $answer->user,
+    ];
+@endphp
+
 <div class="post-item flex gap-6 min-w-0">
     <x-vote-controls
         :votes="$answer->votes_count"
@@ -6,28 +17,14 @@
         :accepted="$question->best_answer_id === $answer->id"
     />
 
-    <div class="flex-1 min-w-0">
-        <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
-            {!! $answer->body_html !!}
-        </div>
-        <div class="mt-4 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-4 shrink-0">
-                @can('update', $answer)
-                    <a href="{{ route('questions.answers.edit', [$question, $answer]) }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                        {{ __('Edit') }}
-                    </a>
-                @endcan
-                @can('delete', $answer)
-                    <form method="post" action="{{ route('questions.answers.destroy', [$question, $answer]) }}" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('{{ __('Are you sure?') }}')">
-                            {{ __('Delete') }}
-                        </button>
-                    </form>
-                @endcan
-            </div>
-            <x-author-meta :model="$answer" label="Answered" />
-        </div>
+    <div class="flex-1 min-w-0 w-full">
+        <div
+            data-vue-answer
+            class="w-full min-w-0"
+            data-answer='@json($answerPayload)'
+            data-can-update="@json(auth()->user()?->can('update', $answer) ?? false)"
+            data-can-delete="@json(auth()->user()?->can('delete', $answer) ?? false)"
+            data-delete-url="{{ route('questions.answers.destroy', [$question, $answer]) }}"
+        ></div>
     </div>
 </div>
