@@ -56,7 +56,7 @@
             },
         }"
     @endif
-    {{ $attributes->merge(['class' => 'flex flex-col items-center shrink-0 min-w-[60px] mr-8 text-center text-gray-600 dark:text-gray-400']) }}
+    {{ $attributes->merge(['class' => 'flex flex-col items-center shrink-0 min-w-[60px] text-center text-gray-600 dark:text-gray-400']) }}
 >
     @if ($voteUrl)
         <button type="button"

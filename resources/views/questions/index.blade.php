@@ -1,24 +1,25 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('All Questions') }}
-            </h2>
-            <a href="{{ route('questions.create') }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                {{ __('Ask Question') }}
-            </a>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('All Questions') }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="flex justify-end mb-4">
+                        <a href="{{ route('questions.create') }}" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+                            {{ __('Ask Question') }}
+                        </a>
+                    </div>
+
                     @include('layouts._messages')
 
                     @foreach ($questions as $question)
-                        <div class="flex gap-6">
-                            <div class="flex flex-col items-center gap-2 min-w-20 text-sm text-gray-600 dark:text-gray-400">
+                        <div class="flex gap-6 min-w-0">
+                            <div class="flex flex-col items-center gap-2 min-w-20 shrink-0 text-sm text-gray-600 dark:text-gray-400">
                                 <div class="text-center">
                                     <span class="font-semibold text-gray-900 dark:text-gray-100">{{ $question->votes_count }}</span>
                                     {{ Str::plural('vote', $question->votes_count) }}
@@ -36,7 +37,7 @@
                                     {{ $question->views }} {{ Str::plural('view', $question->views) }}
                                 </div>
                             </div>
-                            <div class="flex-1 mb-6">
+                            <div class="flex-1 min-w-0 mb-6">
                                 <div class="flex items-center justify-between gap-4">
                                     <h3 class="text-lg font-semibold">
                                         <a href="{{ $question->url }}" class="text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300">
