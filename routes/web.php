@@ -11,11 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('questions', QuestionController::class)
-    ->except(['index', 'show'])
-    ->middleware('auth');
-Route::resource('questions', QuestionController::class)->only(['index']);
-Route::get('/questions/{question}', [QuestionController::class, 'show'])->name('questions.show');
+Route::resource('questions', QuestionController::class)->middleware('auth');
 
 Route::post('/answers/{answer}/accept', AcceptAnswerController::class)
     ->name('answers.accept')
