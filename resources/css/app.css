@@ -7,3 +7,13 @@
         scrollbar-gutter: stable;
     }
 }
+
+@layer components {
+    .post-item {
+        @apply py-5;
+    }
+
+    .post-item:not(:last-child) {
+        @apply border-b border-gray-200 dark:border-gray-700;
+    }
+}
