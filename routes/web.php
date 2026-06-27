@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AcceptAnswerController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,9 +14,9 @@ Route::get('/', function () {
 Route::resource('questions', QuestionController::class)
     ->except(['index', 'show'])
     ->middleware('auth');
-    
 Route::resource('questions', QuestionController::class)->only(['index']);
 Route::get('/questions/{question}', [QuestionController::class, 'show'])->name('questions.show');
+
 Route::post('/answers/{answer}/accept', AcceptAnswerController::class)
     ->name('answers.accept')
     ->middleware('auth');
@@ -33,6 +34,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::post('/questions/{question}/favorites', [FavoriteController::class, 'store'])->name('questions.favorite');
+    Route::delete('/questions/{question}/favorites', [FavoriteController::class, 'destroy'])->name('questions.unfavorite');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

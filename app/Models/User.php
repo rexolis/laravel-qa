@@ -52,4 +52,9 @@ class User extends Authenticatable
 
         return "https://www.gravatar.com/avatar/{$hash}?s=32";
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Question::class, 'favorites')->withTimestamps(); //, 'author_id', 'question_id');
+    }
 }

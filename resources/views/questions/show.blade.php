@@ -15,7 +15,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex gap-6">
-                        <x-vote-controls :votes="$question->votes" variant="question" />
+                        <x-vote-controls :votes="$question->votes" variant="question" :question="$question" />
 
                         <div class="flex-1 min-w-0">
                             <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
