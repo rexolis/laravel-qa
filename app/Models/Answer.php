@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Votable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable(['body', 'user_id'])]
 class Answer extends Model
 {
-    use HasFactory;
+    use HasFactory, Votable;
 
     public function question()
     {

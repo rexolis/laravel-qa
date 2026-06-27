@@ -48,6 +48,11 @@ class QuestionPolicy
         return $user->id === $question->user_id && $question->answers_count < 1;
     }
 
+    public function vote(User $user, Question $question): bool
+    {
+        return $user->id !== $question->user_id;
+    }
+
     /**
      * Determine whether the user can restore the model.
      */

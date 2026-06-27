@@ -42,7 +42,14 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        $question->load(['user', 'favorites', 'answers.user', 'answers.question']);
+        $question->load([
+            'user',
+            'favorites',
+            'votes' => fn ($query) => $query->where('users.id', auth()->id()),
+            'answers.user',
+            'answers.question',
+            'answers.votes' => fn ($query) => $query->where('users.id', auth()->id()),
+        ]);
         $question->increment('views');
 
         return view('questions.show', compact('question'));

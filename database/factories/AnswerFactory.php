@@ -21,7 +21,6 @@ class AnswerFactory extends Factory
         return [
             'body' => fake()->paragraphs(rand(3, 7), true),
             'user_id' => User::inRandomOrder()->value('id'),
-            'votes_count' => fake()->numberBetween(0, 5),
         ];
     }
 }

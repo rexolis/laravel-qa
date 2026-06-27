@@ -7,21 +7,123 @@
 ])
 
 <div {{ $attributes->merge(['class' => 'flex flex-col items-center shrink-0 min-w-[60px] mr-8 text-center text-gray-600 dark:text-gray-400']) }}>
-    <a href="#" title="{{ $variant === 'question' ? __('This question is useful') : __('This answer is useful') }}"
-        class="block text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 3.5l7.5 9H4.5L12 3.5z" />
-        </svg>
-    </a>
+    @if ($variant === 'answer' && $answer)
+        @auth
+            <a href="#"
+                title="{{ $answer->user_vote === 1 ? __('Undo your upvote') : __('This answer is useful') }}"
+                @class([
+                    'block cursor-pointer',
+                    'text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300' => $answer->user_vote === 1,
+                    'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' => $answer->user_vote !== 1,
+                ])
+                onclick="event.preventDefault(); document.getElementById('up-vote-answer-{{ $answer->id }}').submit();">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 3.5l7.5 9H4.5L12 3.5z" />
+                </svg>
+            </a>
+            <form id="up-vote-answer-{{ $answer->id }}" action="{{ route('answers.vote', $answer) }}" method="POST" class="hidden">
+                @csrf
+                <input type="hidden" name="vote" value="1">
+            </form>
+        @else
+            <span title="{{ __('This answer is useful') }}" class="block text-gray-300 dark:text-gray-600 cursor-default">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 3.5l7.5 9H4.5L12 3.5z" />
+                </svg>
+            </span>
+        @endauth
+    @elseif ($variant === 'question' && $question)
+        @can('vote', $question)
+            <a href="#"
+                title="{{ $question->user_vote === 1 ? __('Undo your upvote') : __('This question is useful') }}"
+                @class([
+                    'block cursor-pointer',
+                    'text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300' => $question->user_vote === 1,
+                    'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' => $question->user_vote !== 1,
+                ])
+                onclick="event.preventDefault(); document.getElementById('up-vote-question-{{ $question->id }}').submit();">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 3.5l7.5 9H4.5L12 3.5z" />
+                </svg>
+            </a>
+            <form id="up-vote-question-{{ $question->id }}" action="{{ route('questions.vote', $question) }}" method="POST" class="hidden">
+                @csrf
+                <input type="hidden" name="vote" value="1">
+            </form>
+        @else
+            <span title="{{ __('This question is useful') }}" class="block text-gray-300 dark:text-gray-600 cursor-default">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 3.5l7.5 9H4.5L12 3.5z" />
+                </svg>
+            </span>
+        @endcan
+    @else
+        <span class="block text-gray-300 dark:text-gray-600 cursor-default">
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 3.5l7.5 9H4.5L12 3.5z" />
+            </svg>
+        </span>
+    @endif
 
     <span class="block text-2xl font-medium text-gray-700 dark:text-gray-200">{{ $votes }}</span>
 
-    <a href="#" title="{{ $variant === 'question' ? __('This question is not useful') : __('This answer is not useful') }}"
-        class="block text-gray-300 dark:text-gray-600 cursor-default">
-        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 20.5l-7.5-9h15L12 20.5z" />
-        </svg>
-    </a>
+    @if ($variant === 'answer' && $answer)
+        @auth
+            <a href="#"
+                title="{{ $answer->user_vote === -1 ? __('Undo your downvote') : __('This answer is not useful') }}"
+                @class([
+                    'block cursor-pointer',
+                    'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300' => $answer->user_vote === -1,
+                    'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' => $answer->user_vote !== -1,
+                ])
+                onclick="event.preventDefault(); document.getElementById('down-vote-answer-{{ $answer->id }}').submit();">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 20.5l-7.5-9h15L12 20.5z" />
+                </svg>
+            </a>
+            <form id="down-vote-answer-{{ $answer->id }}" action="{{ route('answers.vote', $answer) }}" method="POST" class="hidden">
+                @csrf
+                <input type="hidden" name="vote" value="-1">
+            </form>
+        @else
+            <span title="{{ __('This answer is not useful') }}" class="block text-gray-300 dark:text-gray-600 cursor-default">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 20.5l-7.5-9h15L12 20.5z" />
+                </svg>
+            </span>
+        @endauth
+    @elseif ($variant === 'question' && $question)
+        @can('vote', $question)
+            <a href="#"
+                title="{{ $question->user_vote === -1 ? __('Undo your downvote') : __('This question is not useful') }}"
+                @class([
+                    'block cursor-pointer',
+                    'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300' => $question->user_vote === -1,
+                    'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200' => $question->user_vote !== -1,
+                ])
+                onclick="event.preventDefault(); document.getElementById('down-vote-question-{{ $question->id }}').submit();">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 20.5l-7.5-9h15L12 20.5z" />
+                </svg>
+            </a>
+            <form id="down-vote-question-{{ $question->id }}" action="{{ route('questions.vote', $question) }}" method="POST" class="hidden">
+                @csrf
+                <input type="hidden" name="vote" value="-1">
+            </form>
+        @else
+            <span title="{{ __('This question is not useful') }}" class="block text-gray-300 dark:text-gray-600 cursor-default">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 20.5l-7.5-9h15L12 20.5z" />
+                </svg>
+            </span>
+        @endcan
+    @else
+        <span class="block text-gray-300 dark:text-gray-600 cursor-default">
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 20.5l-7.5-9h15L12 20.5z" />
+            </svg>
+        </span>
+    @endif
 
     @if ($variant === 'question' && $question)
         @auth

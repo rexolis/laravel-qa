@@ -20,8 +20,8 @@
                         <div class="flex gap-6">
                             <div class="flex flex-col items-center gap-2 min-w-20 text-sm text-gray-600 dark:text-gray-400">
                                 <div class="text-center">
-                                    <span class="font-semibold text-gray-900 dark:text-gray-100">{{ $question->votes }}</span>
-                                    {{ Str::plural('vote', $question->votes) }}
+                                    <span class="font-semibold text-gray-900 dark:text-gray-100">{{ $question->votes_count }}</span>
+                                    {{ Str::plural('vote', $question->votes_count) }}
                                 </div>
                                 <div @class([
                                     'text-center px-2 py-1 rounded border text-xs font-medium',

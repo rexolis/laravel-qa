@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AcceptAnswerController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\VoteAnswerController;
+use App\Http\Controllers\VoteQuestionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +34,10 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::post('/questions/{question}/favorites', [FavoriteController::class, 'store'])->name('questions.favorite');
     Route::delete('/questions/{question}/favorites', [FavoriteController::class, 'destroy'])->name('questions.unfavorite');
+    Route::post('/questions/{question}/vote', VoteQuestionController::class)->name('questions.vote');
+    
+    Route::post('/answers/{answer}/vote', VoteAnswerController::class)->name('answers.vote');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

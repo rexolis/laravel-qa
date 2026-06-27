@@ -38,17 +38,7 @@
                                 </form>
                             @endcan
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Answered {{ $answer->created_date }}</span>
-                            <div class="flex items-center gap-2">
-                                <a href="{{ $answer->user->url }}">
-                                    <img src="{{ $answer->user->avatar }}" alt="{{ $answer->user->name }}" class="h-8 w-8 rounded-full">
-                                </a>
-                                <a href="{{ $answer->user->url }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                                    {{ $answer->user->name }}
-                                </a>
-                            </div>
-                        </div>
+                        <x-author-meta :model="$answer" label="Answered" />
                     </div>
                 </div>
             </div>

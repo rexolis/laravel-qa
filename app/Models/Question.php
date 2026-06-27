@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Votable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'body', 'user_id', 'views', 'answers_count', 'votes'])]
+#[Fillable(['title', 'body', 'user_id', 'views', 'answers_count', 'votes_count'])]
 class Question extends Model
 {
-    use HasFactory;
+    use HasFactory, Votable;
     
     /**
      * Get the attributes that should be cast.
@@ -22,7 +23,7 @@ class Question extends Model
         return [
             'views' => 'integer',
             'answers_count' => 'integer',
-            'votes' => 'integer',
+            'votes_count' => 'integer',
         ];
     }
 

@@ -15,22 +15,14 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex gap-6">
-                        <x-vote-controls :votes="$question->votes" variant="question" :question="$question" />
+                        <x-vote-controls :votes="$question->votes_count" variant="question" :question="$question" />
 
                         <div class="flex-1 min-w-0">
                             <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
                                 {!! $question->body_html !!}
                             </div>
-                            <div class="mt-4 flex items-center justify-end gap-3">
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Asked {{ $question->created_date }}</span>
-                                <div class="flex items-center gap-2">
-                                    <a href="{{ $question->user->url }}">
-                                        <img src="{{ $question->user->avatar }}" alt="{{ $question->user->name }}" class="h-8 w-8 rounded-full">
-                                    </a>
-                                    <a href="{{ $question->user->url }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                                        {{ $question->user->name }}
-                                    </a>
-                                </div>
+                            <div class="mt-4 flex items-center justify-end">
+                                <x-author-meta :model="$question" label="Asked" />
                             </div>
                         </div>
                     </div>
