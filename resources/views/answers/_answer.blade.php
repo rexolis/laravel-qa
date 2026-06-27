@@ -5,6 +5,7 @@
         'body' => $answer->body,
         'body_html' => $answer->body_html,
         'created_date' => $answer->created_date,
+        'question_slug' => $question->slug,
         'user' => $answer->user,
     ];
 @endphp
@@ -24,7 +25,6 @@
             data-answer='@json($answerPayload)'
             data-can-update="@json(auth()->user()?->can('update', $answer) ?? false)"
             data-can-delete="@json(auth()->user()?->can('delete', $answer) ?? false)"
-            data-delete-url="{{ route('questions.answers.destroy', [$question, $answer]) }}"
         ></div>
     </div>
 </div>

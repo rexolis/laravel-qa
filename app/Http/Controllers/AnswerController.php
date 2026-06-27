@@ -54,11 +54,17 @@ class AnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Question $question, Answer $answer)
+    public function destroy(Request $request, Question $question, Answer $answer)
     {
         $this->authorize('delete', $answer);
 
         $answer->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Your answer has been removed',
+            ]);
+        }
 
         return back()->with('success', "Your answer has been deleted successfully");
     }

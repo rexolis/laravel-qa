@@ -37,22 +37,14 @@
                     >
                         Edit
                     </button>
-                    <form
+                    <button
                         v-if="canDelete"
-                        :action="deleteUrl"
-                        method="POST"
-                        class="inline"
-                        @submit="onDelete"
+                        type="button"
+                        @click="destroy"
+                        class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                     >
-                        <input type="hidden" name="_token" :value="csrfToken">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button
-                            type="submit"
-                            class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                        >
-                            Delete
-                        </button>
-                    </form>
+                        Delete
+                    </button>
                 </div>
                 <UserInfo :model="answer" label="Answered" />
             </div>
@@ -82,10 +74,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        deleteUrl: {
-            type: String,
-            required: true,
-        },
     },
 
     data() {
@@ -95,6 +83,7 @@ export default {
             bodyHtml: this.answer.body_html,
             id: this.answer.id,
             questionId: this.answer.question_id,
+            questionSlug: this.answer.question_slug,
             beforeEditCache: null,
             csrfToken: document.querySelector('meta[name="csrf-token"]')?.content ?? '',
         };
@@ -104,9 +93,19 @@ export default {
         isInvalid() {
             return this.body.length < 10;
         },
+
+        endpoint() {
+            return `/questions/${this.questionSlug}/answers/${this.id}`;
+        },
     },
 
     methods: {
+        requestHeaders() {
+            return {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': this.csrfToken,
+            };
+        },
         edit() {
             this.beforeEditCache = this.body;
             this.editing = true;
@@ -118,13 +117,10 @@ export default {
         },
 
         update() {
-            axios.patch(`/questions/${this.questionId}/answers/${this.id}`, {
+            axios.patch(this.endpoint, {
                 body: this.body,
             }, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': this.csrfToken,
-                },
+                headers: this.requestHeaders(),
             })
                 .then((res) => {
                     this.editing = false;
@@ -137,10 +133,33 @@ export default {
                 });
         },
 
-        onDelete(event) {
+        destroy() {
             if (! confirm('Are you sure?')) {
-                event.preventDefault();
+                return;
             }
+
+            axios.delete(this.endpoint, {
+                headers: this.requestHeaders(),
+            })
+                .then((res) => {
+                    const row = this.$el.closest('.post-item');
+
+                    if (! row) {
+                        alert(res.data.message);
+                        return;
+                    }
+
+                    row.style.transition = 'opacity 500ms ease';
+                    row.style.opacity = '0';
+
+                    row.addEventListener('transitionend', () => {
+                        row.remove();
+                        alert(res.data.message);
+                    }, { once: true });
+                })
+                .catch((err) => {
+                    alert(err.response?.data?.message ?? 'Something went wrong.');
+                });
         },
     },
 };

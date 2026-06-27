@@ -18,6 +18,5 @@ document.querySelectorAll('[data-vue-answer]').forEach((el) => {
         answer: JSON.parse(el.dataset.answer),
         canUpdate: JSON.parse(el.dataset.canUpdate),
         canDelete: JSON.parse(el.dataset.canDelete),
-        deleteUrl: el.dataset.deleteUrl,
     }).mount(el);
 });
