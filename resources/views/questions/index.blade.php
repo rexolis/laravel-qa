@@ -66,7 +66,7 @@
                                     <span class="text-sm text-gray-500 dark:text-gray-400">{{ $question->created_date }}</span>
                                 </p>
                                 <p class="mt-2 text-gray-600 dark:text-gray-300">
-                                    {{ Str::limit($question->body, 250) }}
+                                    {{ $question->excerpt(350) }}
                                 </p>
                             </div>
                         </div>

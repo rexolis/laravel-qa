@@ -60,6 +60,21 @@ class Question extends Model
 
     public function getBodyHtmlAttribute()
     {
+        return clean($this->bodyHtml());
+    }
+
+    public function getExcerptAttribute()
+    {
+        return $this->excerpt(250);
+    }
+
+    public function excerpt(int $length): string
+    {
+        return Str::limit(strip_tags($this->bodyHtml()), $length);
+    }
+
+    private function bodyHtml(): string
+    {
         return \Parsedown::instance()->text($this->body);
     }
 
