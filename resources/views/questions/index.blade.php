@@ -15,8 +15,6 @@
                         </a>
                     </div>
 
-                    @include('layouts._messages')
-
                     @forelse ($questions as $question)
                         @include('questions._excerpt')
                     @empty

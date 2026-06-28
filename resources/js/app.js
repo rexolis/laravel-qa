@@ -1,10 +1,48 @@
 import Alpine from 'alpinejs';
 import { createApp } from 'vue';
+import { toast } from 'vue-sonner';
+import 'vue-sonner/style.css';
+import { bindConfirmTriggers } from './confirm';
+import ToasterHost from './components/ToasterHost.vue';
+import ConfirmModalHost from './components/ConfirmModalHost.vue';
 import UserInfo from './components/UserInfo.vue';
 import Answer from './components/Answer.vue';
 
 window.Alpine = Alpine;
 Alpine.start();
+
+function showFlashMessages() {
+    const el = document.getElementById('flash-messages');
+
+    if (! el) {
+        return;
+    }
+
+    const messages = JSON.parse(el.textContent);
+
+    if (messages.success) {
+        toast.success(messages.success);
+    }
+
+    if (messages.error) {
+        toast.error(messages.error);
+    }
+}
+
+const toasterEl = document.getElementById('toaster');
+
+if (toasterEl) {
+    createApp(ToasterHost).mount(toasterEl);
+    showFlashMessages();
+}
+
+const confirmModalEl = document.getElementById('confirm-modal');
+
+if (confirmModalEl) {
+    createApp(ConfirmModalHost).mount(confirmModalEl);
+}
+
+bindConfirmTriggers();
 
 document.querySelectorAll('[data-user-info]').forEach((el) => {
     createApp(UserInfo, {

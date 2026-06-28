@@ -23,6 +23,6 @@
     <x-input-error class="mt-2" :messages="$errors->get('body')" />
 </div>
 
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-4 pt-4">
     <x-primary-button>{{ $buttonText }}</x-primary-button>
 </div>

@@ -1,13 +1,13 @@
 <template>
     <div class="w-full min-w-0" v-cloak>
-        <form v-if="editing" @submit.prevent="update" class="w-full min-w-0 space-y-3">
+        <form v-if="editing" @submit.prevent="update" class="w-full min-w-0 space-y-4">
             <textarea
                 v-model="body"
                 rows="10"
                 required
                 class="block w-full min-w-0 max-w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             ></textarea>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 pt-4">
                 <button
                     type="submit"
                     :disabled="isInvalid"
@@ -54,6 +54,8 @@
 
 <script>
 import axios from 'axios';
+import { toast } from 'vue-sonner';
+import { confirm } from '../confirm';
 import UserInfo from './UserInfo.vue';
 
 export default {
@@ -102,6 +104,7 @@ export default {
     methods: {
         requestHeaders() {
             return {
+                'Accept': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': this.csrfToken,
             };
@@ -126,15 +129,21 @@ export default {
                     this.editing = false;
                     this.bodyHtml = res.data.body_html;
                     this.answer.body = this.body;
-                    alert(res.data.message);
+                    toast.success(res.data.message);
                 })
                 .catch((err) => {
-                    alert(err.response?.data?.message ?? 'Something went wrong.');
+                    toast.error(err.response?.data?.message ?? 'Something went wrong.');
                 });
         },
 
-        destroy() {
-            if (! confirm('Are you sure?')) {
+        async destroy() {
+            const confirmed = await confirm({
+                title: 'Delete answer',
+                message: 'Are you sure you want to delete this answer?',
+                confirmText: 'Delete',
+            });
+
+            if (! confirmed) {
                 return;
             }
 
@@ -145,7 +154,7 @@ export default {
                     const row = this.$el.closest('.post-item');
 
                     if (! row) {
-                        alert(res.data.message);
+                        toast.success(res.data.message);
                         return;
                     }
 
@@ -154,11 +163,11 @@ export default {
 
                     row.addEventListener('transitionend', () => {
                         row.remove();
-                        alert(res.data.message);
+                        toast.success(res.data.message);
                     }, { once: true });
                 })
                 .catch((err) => {
-                    alert(err.response?.data?.message ?? 'Something went wrong.');
+                    toast.error(err.response?.data?.message ?? 'Something went wrong.');
                 });
         },
     },

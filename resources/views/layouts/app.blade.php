@@ -32,5 +32,17 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <div id="toaster"></div>
+        <div id="confirm-modal"></div>
+
+        @if (session('success') || session('error'))
+            <script type="application/json" id="flash-messages">
+                @json(array_filter([
+                    'success' => session('success'),
+                    'error' => session('error'),
+                ]))
+            </script>
+        @endif
     </body>
 </html>

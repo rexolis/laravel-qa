@@ -32,7 +32,7 @@
                     <form method="post" action="{{ route('questions.destroy', $question) }}" class="inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('{{ __('Are you sure?') }}')">
+                        <button type="submit" data-confirm="{{ __('Are you sure you want to delete this question?') }}" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                             {{ __('Delete') }}
                         </button>
                     </form>

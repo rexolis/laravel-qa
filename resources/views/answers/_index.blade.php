@@ -4,8 +4,6 @@
             {{ $question->answers_count }} {{ Str::plural('answer', $question->answers_count) }}
         </h2>
 
-        @include('layouts._messages')
-
         @foreach ($question->answers as $answer)
             @include('answers._answer')
         @endforeach
