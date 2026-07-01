@@ -7,6 +7,7 @@ import ToasterHost from './components/ToasterHost.vue';
 import ConfirmModalHost from './components/ConfirmModalHost.vue';
 import UserInfo from './components/UserInfo.vue';
 import Answer from './components/Answer.vue';
+import Favorite from './components/Favorite.vue';
 
 window.Alpine = Alpine;
 Alpine.start();
@@ -56,5 +57,12 @@ document.querySelectorAll('[data-vue-answer]').forEach((el) => {
         answer: JSON.parse(el.dataset.answer),
         canUpdate: JSON.parse(el.dataset.canUpdate),
         canDelete: JSON.parse(el.dataset.canDelete),
+    }).mount(el);
+});
+
+document.querySelectorAll('[data-vue-favorite]').forEach((el) => {
+    createApp(Favorite, {
+        question: JSON.parse(el.dataset.question),
+        signedIn: JSON.parse(el.dataset.signedIn),
     }).mount(el);
 });

@@ -13,7 +13,7 @@ class Question extends Model
 {
     use HasFactory, Votable;
 
-    protected $appends = ['created_date'];
+    protected $appends = ['created_date', 'is_favorited', 'favorites_count'];
     
     /**
      * Get the attributes that should be cast.
